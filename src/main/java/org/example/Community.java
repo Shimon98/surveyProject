@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class Community {
     private Set <Member> members;
-    CommunityRegistry registry;
+    private CommunityRegistry registry;
 
     public Community() {
         this.registry=new CommunityRegistry();
