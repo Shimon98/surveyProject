@@ -62,7 +62,7 @@ public class Survey {
 
     public boolean isActive()     { return status == SurveyStatus.ACTIVE; }
     public boolean isClosed()     { return status == SurveyStatus.CLOSED; }
-    public boolean isScheduled()  { return status == SurveyStatus.SCHEDULED; } // אם תבחרו באופציה א'
+    public boolean isScheduled()  { return status == SurveyStatus.SCHEDULED; }
 
 
     public long getId() { return id; }
