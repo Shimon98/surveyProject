@@ -1,7 +1,6 @@
 package org.example;
 
 import org.example.util.SurveyStatus;
-import org.example.util.TimeUtils;
 import org.example.util.Validate;
 
 import java.util.List;
@@ -13,40 +12,47 @@ public class Survey {
     public static final int MIN_QUESTION = 1;
     public static final int MAX_QUESTION = 3;
 
-    private final long id;
-    private final String title;
+    private long id;
+
+    private String title;
     private List<Question> questions;
+
     private long createdAtMs;
     private long startAtMs;
     private long closeAtMs;
+
     private SurveyStatus status;
 
 
-    private Survey(long id, String title, List<Question> questions,
-                   long createdAtMs, long startAtMs, long closeAtMs, SurveyStatus status) {
-        this.id = id;
+    private Survey(String title, List<Question> questions) {
+//        this.id = id;
+
         this.title = title;
         this.questions = questions;
-        this.createdAtMs = createdAtMs;
-        this.startAtMs = startAtMs;
-        this.closeAtMs = closeAtMs;
-        this.status = status;
-    }
 
-    public static Survey create(long id, String title, List<Question> questions,
-                                long startAtMs, long durationMs) {
-        long closeAtMs = startAtMs+durationMs;
+//        this.createdAtMs = createdAtMs;
+//        this.startAtMs = startAtMs;
+//        this.closeAtMs = closeAtMs;
+//        this.status = status;
+     }
+
+    public static Survey create( String title, List<Question> questions) {
+
         String t = Validate.requireText(title, "Survey title");
         List<Question> questionList = Validate.requireSizeBetween(questions, MIN_QUESTION, MAX_QUESTION, ERROR_SIZE);
-        long now = TimeUtils.now();
-        if (closeAtMs <= startAtMs) {
-            throw new IllegalArgumentException("closeAtMs must be after startAtMs");
-        }
-        if (closeAtMs <= now) {
-            throw new IllegalArgumentException("closeAtMs must be in the future");
-        }
-        SurveyStatus status = calcStatus(startAtMs, closeAtMs, now);
-        return new Survey(id, t, questionList, now, startAtMs, closeAtMs, status);
+
+
+//        long closeAtMs = startAtMs+durationMs;
+//        long now = TimeUtils.now();
+//        if (closeAtMs <= startAtMs) {
+//            throw new IllegalArgumentException("closeAtMs must be after startAtMs");
+//        }
+//        if (closeAtMs <= now) {
+//            throw new IllegalArgumentException("closeAtMs must be in the future");
+//        }
+//        SurveyStatus status = calcStatus(startAtMs, closeAtMs, now);
+
+        return new Survey( t, questionList);
     }
 
 
@@ -62,7 +68,7 @@ public class Survey {
 
     public boolean isActive()     { return status == SurveyStatus.ACTIVE; }
     public boolean isClosed()     { return status == SurveyStatus.CLOSED; }
-    public boolean isScheduled()  { return status == SurveyStatus.SCHEDULED; } // אם תבחרו באופציה א'
+    public boolean isScheduled()  { return status == SurveyStatus.SCHEDULED; }
 
 
     public long getId() { return id; }
@@ -73,10 +79,7 @@ public class Survey {
     public long getCloseAtMs() { return closeAtMs; }
     public SurveyStatus getStatus() { return status; }
 
-    // שינויי זמן (מוגנים בעזרת השירות)
-    void setStartAtMs(long startAtMs) { this.startAtMs = startAtMs; }
-    void setCloseAtMs(long closeAtMs) { this.closeAtMs = closeAtMs; }
-    void setStatus(SurveyStatus status) { this.status = status; }
+
 
     @Override
     public String toString() {
