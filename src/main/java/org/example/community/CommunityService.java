@@ -1,4 +1,4 @@
-package org.example;
+package org.example.community;
 
 import org.example.bot.TelegramGateway;
 import org.example.model.Member;

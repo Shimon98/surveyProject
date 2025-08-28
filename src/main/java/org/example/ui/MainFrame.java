@@ -1,9 +1,6 @@
 package org.example.ui;
 
-import org.example.Community;
-import org.example.CommunityRegistry;
-import org.example.Question;
-import org.example.Survey;
+import org.example.community.Community;
 import org.example.bot.Bot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -11,8 +8,6 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainFrame extends JFrame {
     private static final String TITLE = "Survey Maker";

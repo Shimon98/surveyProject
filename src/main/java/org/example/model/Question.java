@@ -1,6 +1,5 @@
-package org.example;
+package org.example.model;
 
-import org.example.model.OptionForQuestion;
 import org.example.util.HesId;
 import org.example.util.HesText;
 import org.example.util.Validate;

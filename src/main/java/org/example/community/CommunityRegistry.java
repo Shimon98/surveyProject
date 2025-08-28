@@ -1,4 +1,4 @@
-package org.example;
+package org.example.community;
 
 import org.example.model.Member;
 import org.example.util.JoinOutcome;
