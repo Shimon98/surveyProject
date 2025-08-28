@@ -61,8 +61,8 @@ public class SurveyEngine {
         System.out.println(LOG_START);
         this.surveySender.sendAllQuestionsToAllMembers(survey);
 
-        SurveyTimeoutThread t = new SurveyTimeoutThread(this.surveyState, this.surveyCloser, 5 * 60 * 1000L);
-        t.start();
+        SurveyTimeoutThread timeoutThread = new SurveyTimeoutThread(this.surveyState, this.surveyCloser, 5 * 60 * 1000L);
+        timeoutThread.start();
     }
 
     public void onPollAnswer(PollAnswer pollAnswer) {

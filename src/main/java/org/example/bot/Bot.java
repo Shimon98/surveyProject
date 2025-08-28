@@ -100,20 +100,5 @@ public class Bot extends TelegramLongPollingBot {
 //
 //
 //
-//    private Survey survey(){// רק בדיקה
-//        System.out.println("entered Survey");
-//        List<String> optionText= List.of("You","Me");
-//        System.out.println("1");
-//        Question question= Question.crate(1,"Who’s more likely to get handcuffed tonight",optionText);
-//        System.out.println("2");
-//        List<Question> questionArrayList=new ArrayList<>();
-//        System.out.println("3");
-//        questionArrayList.add(question);
-//        System.out.println("4");
-//        Survey survey =Survey.create("temp",questionArrayList);
-//        System.out.println("about to leave Survey");
 //
-//        return survey;
-//    }
-
 }
