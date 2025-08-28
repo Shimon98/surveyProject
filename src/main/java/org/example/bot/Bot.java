@@ -1,7 +1,7 @@
 package org.example.bot;
 
+import org.example.BotEngine;
 import org.example.Community;
-import org.example.CommunityRegistry;
 import org.example.Question;
 import org.example.Survey;
 import org.example.config.Config;
@@ -9,7 +9,6 @@ import org.example.model.Member;
 import org.example.model.OptionForQuestion;
 import org.example.util.JoinOutcome;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.polls.SendPoll;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -21,7 +20,7 @@ import java.util.Set;
 
 
 public class Bot extends TelegramLongPollingBot {
-    // neme= Survey Project Bot
+    // name= Survey Project Bot
     // userName= @surveyProject2Bot
 
     private Community community;
@@ -54,23 +53,17 @@ public class Bot extends TelegramLongPollingBot {
         joinOutcome(chatId, text, name);
 
 
-        try {
-            Thread.sleep(10000);
-            Survey survey = survey();
-            Set<Long>chetIDS = this.community.getAllChetId();
-            for (Long id : chetIDS){
-                System.out.println("111111111111111");
-                sendSurvey(survey, id);
-            }
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-
-
-
-
-
+//        try {
+//            Thread.sleep(10000);
+//            Survey survey = survey();
+//            Set<Long>chetIDS = this.community.getAllChetId();
+//            for (Long id : chetIDS){
+//                System.out.println("111111111111111");
+//                sendSurvey(survey, id);
+//            }
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
 
@@ -83,33 +76,6 @@ public class Bot extends TelegramLongPollingBot {
 
     }
 
-    private void joinOutcome(long chatId, String text, String displayName) {
-        JoinOutcome outcome = community.handlRegister(chatId, displayName, text);
-        switch (outcome) {
-            case JOINED -> {
-                Member member = community.getMemberByChetId(chatId);
-                displayName = member.getUserName();
-                send(chatId, "Congratulations " + displayName +
-                        ", you have joined the community🎉. " +
-                        " There are now  " + community.size() + " members in the community. ");
-
-                for (Long id : community.getAllChetId()) {
-                    if (!id.equals(chatId)) {
-                        send(id, displayName + " joined the community. The community now has "
-                                + community.size() + " members.");
-                    }
-                }
-            }
-            case ALREADY_MEMBER -> { // לא מוממש עדיין
-            }
-            case NOT_TRIGGER -> {// לא מוממש עדיין
-            }
-        }
-
-    }
-
-
-
 
 
     public void sendSurvey(Survey survey , Long chatId){
@@ -118,7 +84,7 @@ public class Bot extends TelegramLongPollingBot {
         int counter = 0;
         for (Question question : survey.getQuestions()){
             Question tempQ = question;
-            List<String> textOptions = extractTextOptionsFromQuestion(tempQ);
+            List<String> textOptions = extractOptionsAsTextFromQuestion(tempQ);
             counter++;
 
             SendPoll sendPoll = new SendPoll();
@@ -138,7 +104,7 @@ public class Bot extends TelegramLongPollingBot {
 
     }
 
-    private List<String> extractTextOptionsFromQuestion(Question question){
+    private List<String> extractOptionsAsTextFromQuestion(Question question){
         List<String> textOptions = new ArrayList<>();
         List<OptionForQuestion> options = question.getOptions();
         for (int i = 0; i < options.size(); i++){
@@ -157,7 +123,8 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    private Survey survey(){
+
+    private Survey survey(){// רק בדיקה
         System.out.println("entered Survey");
         List<String> optionText= List.of("You","Me");
         System.out.println("1");

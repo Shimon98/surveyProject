@@ -20,8 +20,8 @@ public class CommunityRegistry {
 
 
 
-    public JoinOutcome handlRegisterToCommunity(Long chetID, String userName, String text){
-        if (!isTrigerText(text)){
+    public JoinOutcome registerHandleToCommunity(Long chetID, String userName, String text){
+        if (!isTriggerText(text)){
             return JoinOutcome.NOT_TRIGGER;
         }
         String name = userName;
@@ -34,7 +34,7 @@ public class CommunityRegistry {
         return added ? JoinOutcome.JOINED : JoinOutcome.ALREADY_MEMBER;
     }
 
-    private boolean isTrigerText(String text){
+    private boolean isTriggerText(String text){
     return JoinTrigger.matches(text);
     }
 

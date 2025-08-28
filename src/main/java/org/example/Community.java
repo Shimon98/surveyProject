@@ -15,7 +15,7 @@ public class Community {
         this.members = this.registry.getMembers();
     }
     public JoinOutcome handlRegister(Long chetID, String userName, String text){
-       return this.registry.handlRegisterToCommunity(chetID,userName,text);
+       return this.registry.registerHandleToCommunity(chetID,userName,text);
     }
 
     public Set<Member> getMembers() {
@@ -25,7 +25,7 @@ public class Community {
     public Member getMemberByChetId(Long chetId){
         if (exists(chetId)){
         for (Member member :this.members){
-            if (member.getChetID()==chetId){
+            if (member.getChatId()==chetId){
                 return member;
             }
         }}
@@ -43,7 +43,7 @@ public class Community {
         Set<Long> allChetID= new HashSet<>();
 
         for (Member member: this.members){
-            allChetID.add(member.getChetID());
+            allChetID.add(member.getChatId());
         }
         return allChetID;
     }
