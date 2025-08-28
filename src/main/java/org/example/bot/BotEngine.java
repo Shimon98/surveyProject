@@ -17,7 +17,6 @@ public class BotEngine {
     private TelegramGateway gateway;
     private CommunityService communityService;
     private Community community;
-
     private TelegramPollEngine telegramPollEngine;
     private SurveyEngine surveyEngine;
 

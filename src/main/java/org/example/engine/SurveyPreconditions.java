@@ -5,8 +5,8 @@ import org.example.model.Survey;
 import org.example.SurveyState;
 
 public class SurveyPreconditions {
-    private static final String ERROR_ACTIVE_SURVEY = "יש כבר סקר פעיל. סגור את הסקר הנוכחי לפני פתיחת סקר חדש.";
-    private static final String ERROR_MIN_COMMUNITY = "נדרשים לפחות 3 חברים בקהילה כדי להתחיל סקר.";
+    private static final String ERROR_ACTIVE_SURVEY = "There is already an active survey. Close the current survey before opening a new one.";
+    private static final String ERROR_MIN_COMMUNITY = "At least 3 community members are required to start a survey.";
     private static final String ERROR_SURVEY_NULL = "Survey is null";
     private static final String ERROR_QUESTIONS_EMPTY = "Survey has no questions";
 

@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SurveyCloser {
-    private static final String LOG_PREFIX = "[SurveyCloser] ";
-    private static final String LOG_ALL_ANSWERED = LOG_PREFIX + "כולם ענו לכל השאלות. סוגר מיידית.";
 
     private TelegramPollEngine telegramPollEngine;
     private SurveyState surveyState;
@@ -39,6 +37,5 @@ public class SurveyCloser {
             }
         }
 
-        System.out.println(LOG_ALL_ANSWERED);
     }
 }

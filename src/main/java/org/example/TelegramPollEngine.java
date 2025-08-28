@@ -9,15 +9,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.List;
 
-/**
- * מנוע POLL לטלגרם: שכבת מעטפת נקייה סביב TelegramGateway.
- * מחזיר PollSendResult עם messageId + pollId לאחר שליחה.
- */
 public class TelegramPollEngine {
-
-    private static final String LOG_PREFIX = "[TelegramPollEngine] ";
-    private static final String LOG_SEND = LOG_PREFIX + "שולח Poll ל-chatId=%d";
-    private static final String LOG_STOP = LOG_PREFIX + "עוצר Poll ל-chatId=%d, messageId=%d";
     private static final boolean FALSE = false;
 
     private TelegramGateway telegramGateway;
@@ -28,7 +20,6 @@ public class TelegramPollEngine {
     }
 
     public PollSendResult sendQuestionPoll(long chatId, String questionText, List<String> optionTexts) throws TelegramApiException {
-        System.out.println(String.format(LOG_SEND, chatId));
         SendPoll poll = new SendPoll(String.valueOf(chatId), questionText, optionTexts);
         poll.setIsAnonymous(FALSE);
         poll.setAllowMultipleAnswers(FALSE);
@@ -42,7 +33,6 @@ public class TelegramPollEngine {
     }
 
     public void stopPollByMessageId(long chatId, int messageId) {
-        System.out.println(String.format(LOG_STOP, chatId, messageId));
         try {
             Poll p = this.telegramGateway.stopPoll(new StopPoll(String.valueOf(chatId), messageId));
         } catch (TelegramApiException e) {

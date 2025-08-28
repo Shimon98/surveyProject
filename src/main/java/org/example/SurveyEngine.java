@@ -8,15 +8,10 @@ import org.telegram.telegrambots.meta.api.objects.polls.PollAnswer;
 import java.util.Map;
 
 public class SurveyEngine {
-    private static final String LOG_PREFIX = "[SurveyEngine] ";
-    private static final String LOG_START = LOG_PREFIX + "מתחיל סקר...";
-
     private Community community;
     private TelegramPollEngine telegramPollEngine;
-
     private SurveyState surveyState;
     private SurveyResult surveyResult;
-
     private SurveyLocks surveyLocks;
     private SurveyPreconditions surveyPreconditions;
     private CountersPreparer countersPreparer;
@@ -58,7 +53,7 @@ public class SurveyEngine {
             this.surveyCloser = new SurveyCloser(this.telegramPollEngine, this.surveyState, this.surveyLocks);
         }
         this.countersPreparer.prepareForAllQuestions(survey);
-        System.out.println(LOG_START);
+
         this.surveySender.sendAllQuestionsToAllMembers(survey);
 
         SurveyTimeoutThread timeoutThread = new SurveyTimeoutThread(this.surveyState, this.surveyCloser, 5 * 60 * 1000L);
