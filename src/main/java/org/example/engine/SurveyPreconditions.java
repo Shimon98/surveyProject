@@ -22,7 +22,7 @@ public class SurveyPreconditions {
         if (this.surveyState.isSurveyOpen()) {
             throw new IllegalStateException(ERROR_ACTIVE_SURVEY);
         }
-        if (this.community == null || this.community.size() < 3) {
+        if (this.community == null || this.community.size() < 1) {
             throw new IllegalStateException(ERROR_MIN_COMMUNITY);
         }
         if (survey == null) {
