@@ -4,6 +4,7 @@ import org.example.SurveyEngine;
 import org.example.TelegramPollEngine;
 import org.example.community.Community;
 import org.example.community.CommunityService;
+import org.example.config.DemoSurveyFactory;
 import org.example.model.Question;
 import org.example.model.Survey;
 import org.example.util.JoinOutcome;
@@ -30,27 +31,37 @@ public class BotEngine {
         this.surveyEngine = new SurveyEngine(this.telegramPollEngine, this.community);
     }
 
+    public void onUpdate(Update update) {
+        chakMasege(update);
+
+        if (update.hasPollAnswer()) {
+            this.surveyEngine.onPollAnswer(update.getPollAnswer());
+        }
+
+
+        if (update.hasMessage() && update.getMessage().hasText()) {
+            String txt = update.getMessage().getText().trim();
+            if ("/survey_demo".equalsIgnoreCase(txt)) {
+                if (!this.surveyEngine.isSurveyActive()) {
+                    this.surveyEngine.startSurvey(DemoSurveyFactory.buildDemoSurvey());
+                }
+            }
+        }
+
+    }
+
 
 
     public void startSurveyFromUi(Survey survey) {
+        this.surveyEngine.startSurvey(survey);
 
-//        this.surveyEngine.startSurvey(survey);
-        this.surveyEngine.startSurvey(surveyDemo());
     }
     public Map<Integer, int[]> getCountsForUi() {
         return this.surveyEngine.getOptionCountsSnapshot();
     }
 
 
-   public void onUpdate(Update update) {
-        chakMasege(update);
 
-       if (update.hasPollAnswer()) {
-           this.surveyEngine.onPollAnswer(update.getPollAnswer());
-       }
-       startSurveyFromUi(surveyDemo());
-
-   }
 
 
     private void chakMasege(Update update){
@@ -72,20 +83,6 @@ public class BotEngine {
 
 
 
-    private Survey surveyDemo() {// רק בדיקה
-        System.out.println("entered Survey");
-        List<String> optionText= List.of("You","Me");
-        System.out.println("1");
-        Question question= Question.crate(1,"Who’s more likely to get handcuffed tonight",optionText);
-        System.out.println("2");
-        List<Question> questionArrayList=new ArrayList<>();
-        System.out.println("3");
-        questionArrayList.add(question);
-        System.out.println("4");
-        Survey survey =Survey.create("temp",questionArrayList);
-        System.out.println("about to leave Survey");
 
-        return survey;
-    }
 
     }
