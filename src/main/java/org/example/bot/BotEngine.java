@@ -14,6 +14,7 @@ public class BotEngine {
     private TelegramGateway gateway;
     private CommunityService communityService;
     private Community community;
+
     private TelegramPollEngine telegramPollEngine;
     private SurveyEngine surveyEngine;
 
@@ -23,10 +24,8 @@ public class BotEngine {
         this.gateway = gateway;
         this.community=new Community();
         this.communityService =new CommunityService(this.community,this.gateway);
-
         this.telegramPollEngine = new TelegramPollEngine(this.gateway);
         this.surveyEngine = new SurveyEngine(this.telegramPollEngine, this.community);
-
     }
 
     public void startSurveyFromUi(Survey survey) {
@@ -39,6 +38,9 @@ public class BotEngine {
 
    public void onUpdate(Update update) {
         chakMasege(update);
+       if (update.hasPollAnswer()) {
+           this.surveyEngine.onPollAnswer(update.getPollAnswer());
+       }
    }
 
 
