@@ -18,7 +18,7 @@ public class CommunityService {
 
     public JoinOutcome handleRegister(long chatId, String displayName, String text) {
         return this.community.handlRegister(chatId, displayName, text);
-    }
+    } 
 
     public void respondToJoinOutcome(JoinOutcome outcome, long chatId) {
         switch (outcome) {

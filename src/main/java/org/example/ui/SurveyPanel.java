@@ -12,6 +12,3 @@ public class SurveyPanel extends JPanel {
 }
 
 
-
-
-
