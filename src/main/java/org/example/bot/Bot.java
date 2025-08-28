@@ -23,10 +23,14 @@ public class Bot extends TelegramLongPollingBot {
     // name= Survey Project Bot
     // userName= @surveyProject2Bot
 
-    private Community community;
+
+    private TelegramGateway telegramGateway;
+    private BotEngine botEngine;
 
     public Bot(Community community) {
-        this.community = community;
+        this.telegramGateway=new TelegramGateway(this);
+        this.botEngine=new BotEngine(this.telegramGateway);
+
     }
 
 
@@ -43,14 +47,12 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        botEngine(update);
+        this.botEngine.onUpdate(update);
     }
 
     private void botEngine(Update update)  {
-        long chatId = update.getMessage().getChatId();
-        String text = update.getMessage().getText();
-        String name = getName(update);
-        joinOutcome(chatId, text, name);
+
+
 
 
 //        try {
@@ -67,14 +69,7 @@ public class Bot extends TelegramLongPollingBot {
     }
 
 
-    private String getName(Update update) {
-        if (update.getMessage().getFrom().getUserName() == null) {
-            return null;
-        }
-        String name = update.getMessage().getFrom().getFirstName() + " " + update.getMessage().getFrom().getLastName();
-        return name;
 
-    }
 
 
 
@@ -115,13 +110,7 @@ public class Bot extends TelegramLongPollingBot {
     }
 
 
-    private void send(long chatId, String text) {
-        try {
-            execute(SendMessage.builder().chatId(chatId).text(text).build());
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-    }
+
 
 
     private Survey survey(){// רק בדיקה
