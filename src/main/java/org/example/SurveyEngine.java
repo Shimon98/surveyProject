@@ -1,6 +1,8 @@
+// file: org/example/SurveyEngine.java
 package org.example;
 
 import org.example.community.Community;
+import org.example.community.CommunityBroadcaster;
 import org.example.engine.*;
 import org.example.model.Survey;
 import org.telegram.telegrambots.meta.api.objects.polls.PollAnswer;
@@ -8,6 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.polls.PollAnswer;
 import java.util.Map;
 
 public class SurveyEngine {
+
     private Community community;
     private TelegramPollEngine telegramPollEngine;
     private SurveyState surveyState;
@@ -20,6 +23,9 @@ public class SurveyEngine {
     private SurveySender surveySender;
     private AnswerProcessor answerProcessor;
     private SurveyCloser surveyCloser;
+    private CommunityBroadcaster broadcaster;
+    private SurveyResultFormatter resultFormatter;
+    private SurveyFinisher surveyFinisher;
 
     public SurveyEngine(TelegramPollEngine telegramPollEngine, Community community) {
         this.telegramPollEngine = telegramPollEngine;
@@ -31,39 +37,37 @@ public class SurveyEngine {
         this.optionTextBuilder = new OptionTextBuilder();
         this.messageAndPollRegistry = new MessageAndPollRegistry(this.surveyState, this.surveyLocks);
         this.surveySender = new SurveySender(this.community, this.telegramPollEngine, this.optionTextBuilder, this.messageAndPollRegistry);
-
+        this.broadcaster = new CommunityBroadcaster(this.community, this.telegramPollEngine);
+        this.resultFormatter = new SurveyResultFormatter();
     }
 
-    public boolean isSurveyActive() {
-        return this.surveyState.isSurveyOpen();
-    }
-
+    public boolean isSurveyActive() { return this.surveyState.isSurveyOpen(); }
 
     public void startSurvey(Survey survey) {
         this.surveyPreconditions.validateStart(survey);
-
         int communitySize = this.community.size();
         synchronized (this.surveyLocks.getStateLock()) {
             this.surveyState.resetForNewSurvey(survey, communitySize);
-            this.surveyResult = new SurveyResult(
-                    this.surveyState.getOptionCountsByQuestionIndex(),
-                    this.surveyState.getAnsweredUserIdsByQuestionIndex()
-            );
+            this.surveyResult = new SurveyResult(this.surveyState.getOptionCountsByQuestionIndex(),
+                    this.surveyState.getAnsweredUserIdsByQuestionIndex());
             this.answerProcessor = new AnswerProcessor(this.surveyState, this.surveyResult, this.surveyLocks);
             this.surveyCloser = new SurveyCloser(this.telegramPollEngine, this.surveyState, this.surveyLocks);
+            this.surveyFinisher = new SurveyFinisher(this.surveyCloser, this.surveyState, this.surveyResult,
+                    this.resultFormatter, this.broadcaster);
         }
         this.countersPreparer.prepareForAllQuestions(survey);
-
+        System.out.println("[SurveyEngine] Starting survey...");
         this.surveySender.sendAllQuestionsToAllMembers(survey);
 
-        SurveyTimeoutThread timeoutThread = new SurveyTimeoutThread(this.surveyState, this.surveyCloser, 5 * 60 * 1000L);
-        timeoutThread.start();
+
+        SurveyTimeoutThread t = new SurveyTimeoutThread(this.surveyState, this.surveyFinisher, 5 * 60 * 1000L);
+        t.start();
     }
 
     public void onPollAnswer(PollAnswer pollAnswer) {
         boolean allAnswered = this.answerProcessor.process(pollAnswer);
         if (allAnswered) {
-            this.surveyCloser.closeNow();
+            this.surveyFinisher.finishAllAnswered();
         }
     }
 

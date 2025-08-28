@@ -3,6 +3,7 @@ package org.example;
 import org.example.bot.TelegramGateway;
 import org.telegram.telegrambots.meta.api.methods.polls.SendPoll;
 import org.telegram.telegrambots.meta.api.methods.polls.StopPoll;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.polls.Poll;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -35,6 +36,14 @@ public class TelegramPollEngine {
     public void stopPollByMessageId(long chatId, int messageId) {
         try {
             Poll p = this.telegramGateway.stopPoll(new StopPoll(String.valueOf(chatId), messageId));
+        } catch (TelegramApiException e) {
+
+        }
+    }
+    public void sendTextToChat(long chatId, String text) {
+        try {
+            SendMessage msg = new SendMessage(String.valueOf(chatId), text);
+            this.telegramGateway.sendMessage(msg);
         } catch (TelegramApiException e) {
 
         }
